@@ -1,5 +1,7 @@
 # CS6065_HW2
 
+**Disclaimer - Since the grading of this assignment, the AWS Cloud Server hosting the following Public IP Address has been terminated.**
+
 A simple Restful Webservice that hosts weather information using mySQL. It utilizess REST API endpoints and input data as input parameteres to either GET or POST operations. These operations will then return JSON result in plain-text to the user.
 
 ## Getting Started
