@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/*
+Layout heavily draws from the tutorials provided by W3Schools on creating tabs
+https://www.w3schools.com/howto/howto_js_tabs.asp
+*/
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<body ng-controller="myCtrl">
+
+<h2>Cloud Computing - HW2, HW3, Project 1</h2>
+<p>Click on the buttons inside the tabbed menu:</p>
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'availableDate')">List All Dates</button>
+  <button class="tablinks" onclick="openTab(event, 'searchDate')">Particular Date</button>
+  <button class="tablinks" onclick="openTab(event, 'addDate')">Add Date</button>
+  <button class="tablinks" onclick="openTab(event, 'deleteDate')">Delete Date</button>
+  <button class="tablinks" onclick="openTab(event, 'forecast7')">Seven-day Forecast</button>
+  <button class="tablinks" onclick="openTab(event, 'forecast5')">Five-day Forecast</button>
+</div>
+
+<div id="availableDate" class="tabcontent">
+  <h3>List All Dates</h3>
+  <p>Assignments: GET /historical, dynamic</p>
+  <p><a href="http://localhost:80/historical">http://localhost:80/historical</a></p>
+  <button id="availableDateButton">Click to dynamically display data</button>
+  <hr>
+  <div id="availableDateData"></div>
+</div>
+
+<div id="searchDate" class="tabcontent">
+  <h3>Particular date</h3>
+  <p>Assignments: GET /historical/YYYYMMDD, dynamic</p>
+  <p>e.g. <a href="http://localhost:80/historical/20190101">http://localhost:80/historical/20190101</a></p>
+  <p>
+  Date (YYYYMMDD): <input type="text" name="searchDateDate" id="searchDateDate" value="20190101"><br>
+  <button id="searchDateButton">Click to dynamically display data</button>
+  </p>
+  <hr>
+  <div id="searchDateData"></div>
+</div>
+
+<div id="addDate" class="tabcontent">
+  <h3>Add Date</h3>
+  <p>Assignments: POST /historical, dynamic</p>
+  <form method="post" action="/historical">
+    Date (YYYYMMDD): <input type="text" name="addDateDate" id="addDateDate" value="99990101" /><br>
+    TMin: <input type="text" name="addDateTMin" id="addDateTMin" value="23" /><br>
+    TMax: <input type="text" name="addDateTMax" id="addDateTMax" value="24" /><br>
+    <input type="submit" name="addDateSubmit" id="addDateSubmit" value="Add Date" />
+  </form>
+  <hr>
+  <div id="addDateData"></div>
+</div>
+
+<div id="deleteDate" class="tabcontent">
+  <h3>Delete Date</h3>
+  <p>Assignments: DELETE /historical/YYYYMMDD, dynamic</p>
+  <p>
+  Date (YYYYMMDD): <input type="text" name="deleteDateDate" id="deleteDateDate" value="99990101"><br>
+  <button id="deleteDateButton">Delete Date</button>
+  </p>
+  <hr>
+  <div id="deleteDateData"></div>
+</div>
+
+<div id="forecast7" class="tabcontent">
+  <h3>[Extra Credit] 7-Day Forecast</h3>
+  <p>Assignments: GET /forecast/YYYYMMDD, dynamic</p>
+  <p>e.g. <a href="http://localhost:80/forecast/20190601">http://localhost:80/forecast/20190601</a></p>
+  <p>
+  Future date only, as it is a forecast<br>
+  Entries not satisfying this condition will return an empty array<br>
+  Date (YYYYMMDD): <input type="text" name="forecast7Date" id="forecast7Date"><br>
+  <button id="forecast7Button">Click to dynamically display data</button>
+  </p>
+  <hr>
+  <div id="forecast7Data"></div>
+</div>
+
+<div id="forecast5" class="tabcontent">
+  <h3>5-Day Forecast</h3>
+  <p>Assignments: 5-day forecast (POST), dynamic</p>
+  <p>
+  Future date only, as it is a forecast<br>
+  Entries not satisfying this condition will return an empty array<br>
+  Date (YYYYMMDD): <input type="text" name="forecast5Date" id="forecast5Date"><br>
+  <button id="forecast5Button">Click to dynamically display data</button>
+  </p>
+  <hr>
+  <div id="forecast5Data"></div>
+</div>
+
+<script>
+// Heavily referenced documentation provided by jQuery on performing Ajax requests
+// http://api.jquery.com/jquery.ajax/
+// https://api.jquery.com/jquery.get/
+// https://api.jquery.com/jquery.post/
+$('#availableDateButton').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#availableDateData").text("");
+  var url = '/historical';
+  var gett = $.get(url, {});
+  gett.done(function (data) {
+    $("#availableDateData").text(JSON.stringify(data));
+  });
+});
+$('#searchDateButton').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#searchDateData").text("");
+  var url = '/historical/' + $("#searchDateDate").val();
+  var gett = $.get(url, {});
+  gett.done(function (data) {
+    $("#searchDateData").text(JSON.stringify(data));
+  });
+});
+$('#addDateSubmit').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#addDateData").text("");
+  var url = '/historical';
+  var post = $.post(url, {
+    date: $("#addDateDate").val(),
+    tmin: $("#addDateTMin").val(),
+    tmax: $("#addDateTMax").val() });
+  post.done(function (data) {
+    $("#addDateData").text(JSON.stringify(data));
+  });
+});
+$('#deleteDateButton').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#deleteDateData").text("");
+  $.ajax({
+    url: '/historical/' + $("#deleteDateDate").val(),
+    type: 'DELETE',
+    success: function (data) {
+      $("#deleteDateData").text(JSON.stringify(data));
+  }});
+});
+$('#forecast7Button').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#forecast7Data").text("");
+  var url = '/forecast/' + $("#forecast7Date").val();
+  var gett = $.get(url, {});
+  gett.done(function (data) {
+    $("#forecast7Data").text(JSON.stringify(data));
+  });
+});
+$('#forecast5Button').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#forecast5Data").text("");
+  var url = '/forecast';
+  var post = $.post(url, { date: $("#forecast5Date").val() });
+  post.done(function (data) {
+    $("#forecast5Data").text(JSON.stringify(data));
+  });
+});
+$('#ncdcButton').on('click touchend', function (e) {
+  e.preventDefault();
+  $("#ncdcData").text("");
+  var url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/';
+  var post = $.post(url, { date: $("#forecast5Date").val() });
+  post.done(function (data) {
+    $("#ncdcData").text(JSON.stringify(data));
+  });
+});
+
+function openTab(evt, functionName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(functionName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+
+</body>
+</html>
+
