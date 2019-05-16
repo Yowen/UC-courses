@@ -1,5 +1,7 @@
 # CS6065_HW4
 
+**Disclaimer - Since the grading of this assignment, the AWS Cloud Server hosting the following Public IP Address has been terminated.**
+
 A simple MapReduce program utilizing Hadoop's streaming API in order to analyze data and yield summary counts for each vehicle type that was involved in an accident. The analyzed data was taken from the City of New York's database on vehicular incidents over a period of time.
 
 ## Getting Started
