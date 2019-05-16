@@ -1,5 +1,7 @@
 # CS6065_HW3
 
+**Disclaimer - Since the grading of this assignment, the AWS Cloud Server hosting the following Public IP Address has been terminated.**
+
 A simple Restful Webservice that hosts weather information using mySQL. A simple UI has been implemented for said Webservice with a dynamic approach that uses asynchronous Javascript requests to send the user-inputted data to the ReST API, receiving structured results, and then publish them into the page without refreshing the whole page again.
 
 ## Getting Started
